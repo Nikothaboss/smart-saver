@@ -5,11 +5,12 @@ import {
   getGoalsByUserId,
   deleteGoalById,
 } from "@/lib/services/goalService";
-import { testUserId } from "../utils";
+import { prisma } from "@/lib/prisma";
 
-const userId = testUserId; // Replace with a valid seeded ID
-
-describe("goalService", () => {
+describe("goalService", async () => {
+  const user = await prisma.user.findFirst();
+  if (!user) throw new Error("No user found — seed a user first.");
+  const userId = user.id;
   let goalId: string;
 
   it("should create a goal for a user", async () => {

@@ -5,11 +5,12 @@ import {
   getUserTransactions,
 } from "@/lib/services/userService";
 import { describe, it, expect } from "vitest";
-import { testUserId } from "../utils";
+import { prisma } from "@/lib/prisma";
 
-const userId = testUserId; // Replace with a valid ID
-
-describe("userService", () => {
+describe("userService", async () => {
+  const user = await prisma.user.findFirst();
+  if (!user) throw new Error("No user found — seed a user first.");
+  const userId = user.id;
   it("should return user with related data", async () => {
     const user = await getUserById(userId);
     expect(user).toBeDefined();

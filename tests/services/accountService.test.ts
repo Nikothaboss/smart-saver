@@ -5,24 +5,25 @@ import {
   deleteAccountById,
 } from "@/lib/services/accountService";
 import { Currency } from "@prisma/client";
-import { testUserId } from "../utils";
+import { prisma } from "@/lib/prisma";
 
-const userId = testUserId; // Replace with a valid ID
-
-describe("accountService", () => {
+describe("accountService", async () => {
   let createdAccountId: string;
+  const user = await prisma.user.findFirst();
+  if (!user) throw new Error("No user found — seed a user first.");
 
   it("should create a new account for a user", async () => {
+    if (!user) throw new Error("No user found — seed a user first.");
     const account = await createAccount({
       accountNumber: "****4321",
       accountType: "Checking",
       balance: 7500,
       currency: Currency.NOK,
-      userId,
+      userId: user.id,
     });
 
     expect(account).toBeDefined();
-    expect(account.userId).toBe(userId);
+    expect(account.userId).toBe(user.id);
     expect(account.accountType).toBe("Checking");
 
     createdAccountId = account.id;
@@ -46,7 +47,7 @@ describe("accountService", () => {
       accountType: "Test",
       balance: 123,
       currency: Currency.NOK,
-      userId,
+      userId: user.id,
     });
 
     const deleted = await deleteAccountById(account.id);

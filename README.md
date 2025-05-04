@@ -111,19 +111,19 @@ Studio will open at [http://localhost:5555](http://localhost:5555)
 
 ```bash
 smart-saver/
-├── app/             # Next.js App
-│   └── api/         # API route handlers
+├── app/              # Next.js App
+│   └── api/          # API route handlers
 ├── lib/
-│   ├── prisma.ts    # Shared Prisma client
-│   └── services/    # Business logic by model
+│   ├── prisma.ts     # Shared Prisma client
+│   └── services/     # Business logic by model
 ├── prisma/
 │   ├── schema.prisma # Prisma schema definition
-│   └── seed.ts      # DB seed script
-├── tests/           # Vitest unit/integration tests
+│   └── seed.ts       # DB seed script
+├── tests/            # Vitest unit/integration tests
 │   ├── services/
 │   └── api/
-├── .env             # DB connection string
-└── README.md        # This file
+├── .env              # DB connection string
+└── README.md         # This file
 ```
 
 ---

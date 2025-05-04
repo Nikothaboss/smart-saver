@@ -5,12 +5,17 @@ import {
   getTransactionsByUserId,
 } from "@/lib/services/transactionService";
 import { Currency } from "@prisma/client";
-import { testAccountId, testUserId } from "../utils";
+import { prisma } from "@/lib/prisma";
 
-const userId = testUserId; // Replace with real ID
-const accountId = testAccountId; // Replace with real ID
-
-describe("transactionService", () => {
+describe("transactionService", async () => {
+  const user = await prisma.user.findFirst();
+  if (!user) throw new Error("No user found — seed a user first.");
+  const userId = user.id;
+  const account = await prisma.account.findFirst({
+    where: { userId: userId },
+  });
+  const accountId = account?.id;
+  if (!accountId) throw new Error("No account found — seed an account first.");
   it("should create a transaction for an account", async () => {
     const transaction = await createTransaction({
       date: new Date().toISOString(),

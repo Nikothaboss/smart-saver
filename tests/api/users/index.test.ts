@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { POST } from "@/app/api/users/route";
 import { NextRequest } from "next/server";
+import { deleteUserById } from "@/lib/services/userService";
 
 describe("POST /api/users", () => {
   it("should create a new user", async () => {
@@ -22,6 +23,7 @@ describe("POST /api/users", () => {
     expect(data).toHaveProperty("id");
     expect(data.name).toBe(payload.name);
     expect(data.email).toBe(payload.email);
+    deleteUserById(data.id);
   });
 
   it("should return 500 for invalid payload", async () => {

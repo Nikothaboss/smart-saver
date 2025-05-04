@@ -4,11 +4,12 @@ import {
   deleteRewardById,
   getRewardsByUserId,
 } from "@/lib/services/rewardService";
-import { testUserId } from "../utils";
+import { prisma } from "@/lib/prisma";
 
-const userId = testUserId; // Replace with a valid user ID
-
-describe("rewardService", () => {
+describe("rewardService", async () => {
+  const user = await prisma.user.findFirst();
+  if (!user) throw new Error("No user found — seed a user first.");
+  const userId = user.id;
   it("should create a reward for a user", async () => {
     const reward = await createReward({
       title: "First Transaction Badge",
