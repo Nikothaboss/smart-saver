@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/@prisma/client"
 }
 
 datasource db {
@@ -15,14 +14,20 @@ enum Currency {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  goals     Goal[]
-  accounts  Account[]
-  rewards   Reward[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id              String        @id @default(uuid())
+  name            String
+  email           String        @unique
+  password        String?
+  image           String?
+  emailVerified   DateTime?
+  goals           Goal[]
+  bankAccounts    BankAccount[]
+  rewards         Reward[]
+  transactions    Transaction[]   @relation("UserTransactions")
+  sessions        Session[]
+  accounts        Account[]       // Auth.js accounts
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }
 
 model Goal {
@@ -38,7 +43,7 @@ model Goal {
   @@index([userId])
 }
 
-model Account {
+model BankAccount {
   id             String        @id @default(uuid())
   accountNumber  String
   accountType    String
@@ -60,11 +65,14 @@ model Transaction {
   amount      Float
   currency    Currency
   accountId   String
-  account     Account   @relation(fields: [accountId], references: [id])
+  account     BankAccount @relation(fields: [accountId], references: [id])
+  userId      String
+  user        User      @relation("UserTransactions", fields: [userId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([accountId])
+  @@index([userId])
 }
 
 model Reward {
@@ -77,4 +85,44 @@ model Reward {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+// Auth.js-compliant model
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
 }
