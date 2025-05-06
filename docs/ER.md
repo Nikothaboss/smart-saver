@@ -1,10 +1,10 @@
-# 🧩 Entity Relationship Summary
+# 🤩 Entity Relationship Summary
 
 ### 🔍 Summary
 
-- A **User** has many **Accounts**, **Goals**, and **Rewards**
-- An **Account** belongs to one **User** and has many **Transactions**
-- A **Transaction** is linked to one **Account**
+- A **User** has many **Goals**, **BankAccounts**, **Transactions**, **Rewards**, **Sessions**, and **Auth Accounts**
+- A **BankAccount** belongs to one **User** and has many **Transactions**
+- A **Transaction** is linked to one **User** and one **BankAccount**
 - A **Goal** and a **Reward** belong to one **User**
 
 ### 🗂 Legend
@@ -13,24 +13,31 @@
 - `FK` = Foreign Key
 - `||--o{` = One-to-many relationship
 
-## Mermaid Diagram
+## 🧬 Mermaid Diagram
 
 ```mermaid
 erDiagram
-    User ||--o{ Account : has
+    User ||--o{ BankAccount : has
     User ||--o{ Goal : has
     User ||--o{ Reward : has
-    Account ||--o{ Transaction : has
+    User ||--o{ Transaction : makes
+    User ||--o{ Session : has
+    User ||--o{ Account : authenticates_with
+
+    BankAccount ||--o{ Transaction : has
 
     User {
         String id PK
         String name
         String email
+        String password
+        String image
+        DateTime emailVerified
         DateTime createdAt
         DateTime updatedAt
     }
 
-    Account {
+    BankAccount {
         String id PK
         String accountNumber
         String accountType
@@ -48,6 +55,7 @@ erDiagram
         Float amount
         Currency currency
         String accountId FK
+        String userId FK
         DateTime createdAt
         DateTime updatedAt
     }
@@ -69,5 +77,36 @@ erDiagram
         String userId FK
         DateTime createdAt
         DateTime updatedAt
+    }
+
+    Account {
+        String id PK
+        String userId FK
+        String type
+        String provider
+        String providerAccountId
+        String refresh_token
+        String access_token
+        Int expires_at
+        String token_type
+        String scope
+        String id_token
+        String session_state
+        DateTime createdAt
+        DateTime updatedAt
+    }
+
+    Session {
+        String sessionToken PK
+        String userId FK
+        DateTime expires
+        DateTime createdAt
+        DateTime updatedAt
+    }
+
+    VerificationToken {
+        String identifier PK
+        String token PK
+        DateTime expires
     }
 ```

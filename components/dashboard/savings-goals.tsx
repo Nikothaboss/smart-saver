@@ -26,6 +26,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 interface SavingsGoalsProps {
   goals: Goal[];
@@ -36,6 +37,18 @@ export default function SavingsGoals({ goals }: SavingsGoalsProps) {
   const [newGoalTitle, setNewGoalTitle] = useState("");
   const [newGoalAmount, setNewGoalAmount] = useState("");
   const router = useRouter();
+  const { data: session } = useSession();
+
+  if (!session) {
+    return (
+      <div className="flex flex-col items-center justify-center py-6 text-center">
+        <h3 className="text-lg font-medium">Please log in to view goals</h3>
+        <p className="text-sm text-muted-foreground">
+          Log in to your account to manage your savings goals.
+        </p>
+      </div>
+    );
+  }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("no-NO", {
@@ -50,7 +63,8 @@ export default function SavingsGoals({ goals }: SavingsGoalsProps) {
 
   const handleAddGoal = async () => {
     try {
-      const userId = "8561df7d-02fe-4e63-890b-5b29a511f126"; // TODO: Replace with actual user ID from session
+      const userId = session.user.id;
+      console.log("User ID", userId);
 
       const response = await fetch("/api/goals", {
         method: "POST",
@@ -167,7 +181,7 @@ export default function SavingsGoals({ goals }: SavingsGoalsProps) {
       <CardContent className="space-y-4">
         {goals.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-6 text-center">
-            <Trophy className="h-12 w-12 text-muted-foreground mb-2" />
+            <Trophy className="h-12 w-12 text-muted-foreground mb-2  stroke-amber-300" />
             <h3 className="text-lg font-medium">No goals yet</h3>
             <p className="text-sm text-muted-foreground">
               Create your first savings goal to start tracking your progress!

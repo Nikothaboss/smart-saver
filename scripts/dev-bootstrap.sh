@@ -34,7 +34,7 @@ log "📚 Running database migration..."
 pnpm dlx prisma migrate dev --name init
 
 log "🌱 Seeding the database..."
-pnpm seed
+pnpm db:seed
 
 # log "🔍 Opening Prisma Studio..."
 # pnpm dlx prisma studio

@@ -13,7 +13,18 @@ const adapter = PrismaAdapter(db);
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter,
   providers: [
-    GitHub,
+    GitHub({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+      profile(profile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name,
+          email: profile.email,
+          image: profile.avatar_url,
+        };
+      },
+    }),
     Credentials({
       credentials: {
         email: {},
@@ -43,6 +54,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.credentials = true;
       }
       return token;
+    },
+    async session({ session }) {
+      return session;
     },
   },
   jwt: {

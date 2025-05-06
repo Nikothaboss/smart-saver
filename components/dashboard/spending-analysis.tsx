@@ -29,7 +29,16 @@ export default function SpendingAnalysis({
 }: SpendingAnalysisProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+  const COLORS = [
+    "#4F46E5", // indigo-600
+    "#0EA5E9", // sky-500
+    "#10B981", // emerald-500
+    "#F59E0B", // amber-500
+    "#EC4899", // pink-500
+    "#8B5CF6", // violet-500
+    "#EF4444", // red-500
+    "#14B8A6", // teal-500
+  ];
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("no-NO", {
@@ -49,8 +58,8 @@ export default function SpendingAnalysis({
   const totalSpending = spendingData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <Card className="col-span-1">
-      <CardHeader>
+    <Card className="col-span-1 border-0 shadow-md overflow-hidden">
+      <CardHeader className="relative z-10">
         <CardTitle>Spending Analysis</CardTitle>
         <CardDescription>Where your money is going this month</CardDescription>
       </CardHeader>

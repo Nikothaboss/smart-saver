@@ -56,7 +56,7 @@ export default function RewardsSection({ rewards }: RewardsSectionProps) {
             <CardTitle>Rewards & Achievements</CardTitle>
             <CardDescription>Your financial journey milestones</CardDescription>
           </div>
-          <div className="bg-primary/10 text-primary font-medium rounded-full px-3 py-1 text-sm">
+          <div className="bg-gradient-to-r from-violet-500 to-purple-500 text-white font-medium rounded-full px-3 py-1 text-sm shadow-sm">
             Level {Math.floor(progress / 20) + 1}
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function RewardsSection({ rewards }: RewardsSectionProps) {
                   className={cn(
                     "flex items-center gap-3 p-3 rounded-lg border transition-all",
                     reward.unlocked
-                      ? "border-primary/30 bg-primary/5"
+                      ? "border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 shadow-sm"
                       : "border-muted bg-muted/10 opacity-70"
                   )}
                 >
@@ -91,7 +91,15 @@ export default function RewardsSection({ rewards }: RewardsSectionProps) {
                     className={cn(
                       "p-2 rounded-full",
                       reward.unlocked
-                        ? "bg-primary/20 text-primary"
+                        ? reward.title.includes("Goal")
+                          ? "bg-gradient-to-r from-emerald-400 to-green-500 text-white"
+                          : reward.title.includes("Save")
+                          ? "bg-gradient-to-r from-blue-400 to-cyan-500 text-white"
+                          : reward.title.includes("Profile")
+                          ? "bg-gradient-to-r from-violet-400 to-purple-500 text-white"
+                          : reward.title.includes("Streak")
+                          ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white"
+                          : "bg-gradient-to-r from-rose-400 to-pink-500 text-white"
                         : "bg-muted text-muted-foreground"
                     )}
                   >

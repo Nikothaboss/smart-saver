@@ -33,7 +33,7 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-4 mt-4 md:mt-0">
-        <div className="bg-primary/10 text-primary font-medium rounded-lg px-4 py-2">
+        <div className="bg-gradient-to-r from-violet-500 to-purple-500 text-white font-medium rounded-lg px-4 py-2 shadow-md">
           Total Balance:{" "}
           {new Intl.NumberFormat("no-NO", {
             style: "currency",

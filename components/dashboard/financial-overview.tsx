@@ -43,15 +43,15 @@ export default function FinancialOverview({
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardContent className="p-6">
+              <Card className="overflow-hidden border-0 shadow-md">
+                <CardContent className="p-6 relative z-10">
                   <div className="flex items-center justify-between space-y-0 pb-2">
                     <p className="text-sm font-medium leading-none text-muted-foreground">
                       Total Balance
                     </p>
-                    <Wallet className="h-4 w-4 text-muted-foreground" />
+                    <Wallet className="h-4 w-4 text-blue-500" />
                   </div>
-                  <div className="text-2xl font-bold">
+                  <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">
                     {formatCurrency(totalBalance)}
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -59,32 +59,32 @@ export default function FinancialOverview({
                   </p>
                 </CardContent>
               </Card>
-              <Card>
-                <CardContent className="p-6">
+              <Card className="overflow-hidden border-0 shadow-md">
+                <CardContent className="p-6 relative z-10">
                   <div className="flex items-center justify-between space-y-0 pb-2">
                     <p className="text-sm font-medium leading-none text-muted-foreground">
                       Total Savings
                     </p>
                     <ArrowUpRight className="h-4 w-4 text-green-500" />
                   </div>
-                  <div className="text-2xl font-bold">
+                  <div className="text-2xl font-bold text-green-700 dark:text-green-400">
                     {formatCurrency(totalSavings)}
                   </div>
                   <p className="text-xs text-green-500">+12% from last month</p>
                 </CardContent>
               </Card>
-              <Card>
-                <CardContent className="p-6">
+              <Card className="overflow-hidden border-0 shadow-md">
+                <CardContent className="p-6 relative z-10">
                   <div className="flex items-center justify-between space-y-0 pb-2">
                     <p className="text-sm font-medium leading-none text-muted-foreground">
                       Total Spending
                     </p>
-                    <ArrowDownRight className="h-4 w-4 text-red-500" />
+                    <ArrowDownRight className="h-4 w-4 text-rose-500" />
                   </div>
-                  <div className="text-2xl font-bold">
+                  <div className="text-2xl font-bold text-rose-700 dark:text-rose-400">
                     {formatCurrency(totalSpending)}
                   </div>
-                  <p className="text-xs text-red-500">-5% from last month</p>
+                  <p className="text-xs text-rose-500">-5% from last month</p>
                 </CardContent>
               </Card>
             </div>

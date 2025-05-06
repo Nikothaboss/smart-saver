@@ -52,20 +52,29 @@ export default function Sidebar() {
   return (
     <div className="flex flex-col h-full space-y-4 py-4">
       <div className="px-3 py-2">
-        <h2 className="mb-2 px-4 text-lg font-semibold">SaveSmart</h2>
+        <h2 className="mb-2 px-4 text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+          SaveSmart
+        </h2>
         <div className="space-y-1">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:text-primary",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
                 pathname === item.href
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground"
+                  ? "bg-gradient-to-r from-violet-500/20 to-indigo-500/20 text-violet-700 dark:text-violet-300 font-medium"
+                  : "text-muted-foreground hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20"
               )}
             >
-              <item.icon className="h-4 w-4" />
+              <item.icon
+                className={cn(
+                  "h-4 w-4",
+                  pathname === item.href
+                    ? "text-violet-600 dark:text-violet-400"
+                    : "text-muted-foreground"
+                )}
+              />
               {item.title}
             </Link>
           ))}
@@ -75,7 +84,7 @@ export default function Sidebar() {
         <div className="space-y-1">
           <Link
             href="/dashboard/help"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-primary"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20"
           >
             <HelpCircle className="h-4 w-4" />
             Help & Support

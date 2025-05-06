@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import db from "../db/db";
 
 const prisma = db;
@@ -10,8 +11,10 @@ export const createGoal = async (data: {
 }) => {
   return prisma.goal.create({
     data: {
-      ...data,
+      title: data.title,
+      targetAmount: data.targetAmount,
       currentAmount: data.currentAmount ?? 0,
+      userId: data.userId,
     },
   });
 };

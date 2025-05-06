@@ -13,13 +13,13 @@ const prisma = db;
 export default async function DashboardPage() {
   const session = await auth();
 
-  // if (!session?.user?.email) {
-  //   redirect("/");
-  // }
+  if (!session?.user?.email) {
+    redirect("/");
+  }
 
   // Fetch user data
   const user = await prisma.user.findUnique({
-    where: { email: "alice@example.com" },
+    where: { email: session?.user?.email },
     include: {
       bankAccounts: true,
       goals: true,
