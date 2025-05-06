@@ -47,7 +47,7 @@ export default function SpendingAnalysis({
     }).format(amount);
   };
 
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (_: unknown, index: number) => {
     setActiveIndex(index);
   };
 

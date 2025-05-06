@@ -13,7 +13,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     return NextResponse.json(account);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch account" },
+      { msg: "Failed to fetch account", error: error },
       { status: 500 }
     );
   }

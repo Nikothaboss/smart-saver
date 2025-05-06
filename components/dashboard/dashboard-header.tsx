@@ -27,7 +27,7 @@ export default function DashboardHeader({
             Welcome back, {user.name?.split(" ")[0] || "User"}!
           </h1>
           <p className="text-muted-foreground">
-            Let's check your financial health today
+            Let`&apos;`s check your financial health today
           </p>
         </div>
       </div>

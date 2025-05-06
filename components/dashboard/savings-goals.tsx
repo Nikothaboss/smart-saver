@@ -89,6 +89,7 @@ export default function SavingsGoals({ goals }: SavingsGoalsProps) {
         toast(error?.message || "Failed to create goal. Please try again.");
       }
     } catch (error) {
+      console.error("Error creating goal:", error);
       toast("An unexpected error occurred.");
     }
   };
@@ -123,6 +124,7 @@ export default function SavingsGoals({ goals }: SavingsGoalsProps) {
         toast("Failed to add contribution. Please try again.");
       }
     } catch (error) {
+      console.error("Error contributing to goal:", error);
       toast("An unexpected error occurred.");
     }
   };
