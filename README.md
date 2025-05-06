@@ -2,7 +2,7 @@
 
 Welcome to **Smart Saver** – a budgeting and savings app built with **Next.js**, **Prisma**, **PostgreSQL**, and full test coverage.
 
-This guide covers everything you need to get started with development, including database setup, Prisma tools, and test runners.
+This guide covers everything you need to get started with development, including database setup, Prisma tools, test runners, and authentication setup.
 
 ---
 
@@ -14,6 +14,7 @@ This guide covers everything you need to get started with development, including
 - **UI**: shadcn/ui (optional polish)
 - **Testing**: Vitest (with UI mode)
 - **Package Manager**: pnpm
+- **Auth**: GitHub OAuth via NextAuth.js
 
 ---
 
@@ -25,53 +26,101 @@ This guide covers everything you need to get started with development, including
 pnpm install
 ```
 
-### 2. Start the Database (Docker)
-
-We use Docker to run PostgreSQL locally:
+Or run the full dev bootstrap script:
 
 ```bash
-docker-compose up -d
+pnpm bootstrap
+```
+
+This will:
+
+- Start Docker containers
+- Install dependencies
+- Reset and migrate the database
+- Seed sample data
+- Start the Next.js dev server
+
+### 2. Start the Database (Docker)
+
+```bash
+docker compose up -d
 ```
 
 This starts a container running Postgres on port `5432` with the default user `postgres:postgres`.
 
 ### 3. Set up your environment
 
-Create a `.env` file in the root:
+Create a `.env` file in the root with your database and GitHub credentials:
 
 ```ini
+# PostgreSQL
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/smart_saver"
+
+# GitHub OAuth - Required for login
+GITHUB_ID="<your-github-client-id>"
+GITHUB_SECRET="<your-github-client-secret>"
+
+# NextAuth config
+NEXTAUTH_SECRET="<generated-secret>" # generate with: openssl rand -base64 32
+NEXTAUTH_URL=http://localhost:3000
 ```
 
-### 4. Apply schema and generate Prisma Client
+> ⚠️ You'll need to [register a GitHub OAuth app](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) and set the redirect URL to `http://localhost:3000/api/auth/callback/github`
 
-Run initial Prisma migration:
+### 4. Run migrations and generate Prisma Client
 
 ```bash
-pnpm dlx prisma migrate dev --name init
+pnpm migrate
 ```
 
-Or, to push the schema without generating a migration:
+Or run individually:
 
 ```bash
-pnpm dlx prisma db push
-```
-
-Generate the Prisma client:
-
-```bash
-pnpm dlx prisma generate
+pnpm db:generate
+pnpm db:migrate
 ```
 
 ### 5. Seed the database
-
-Run the seed script to populate the DB with sample data:
 
 ```bash
 pnpm seed
 ```
 
 Make sure your Postgres container is running before seeding.
+
+---
+
+## 🔐 Authentication
+
+Smart Saver uses [NextAuth.js](https://next-auth.js.org/) for authentication with GitHub as a provider.
+
+### Setting up GitHub OAuth
+
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
+2. Create a new **OAuth App**:
+   - **Homepage URL**: `http://localhost:3000`
+   - **Authorization Callback URL**: `http://localhost:3000/api/auth/callback/github`
+3. Copy the **Client ID** and **Client Secret** to your `.env` file:
+
+```ini
+GITHUB_ID=your-client-id
+GITHUB_SECRET=your-client-secret
+```
+
+### Accessing the user session in API routes
+
+To get the authenticated user in backend logic or API routes:
+
+```ts
+import { auth } from "@/lib/auth";
+const session = await auth();
+
+if (!session?.user?.email) {
+  return new Response("Unauthorized", { status: 401 });
+}
+```
+
+Use the session data to access the user email or ID and scope access accordingly.
 
 ---
 
@@ -91,16 +140,20 @@ pnpm test:ui
 
 This opens a local browser where you can explore, filter, and debug tests interactively.
 
+Test coverage includes:
+
+- Service logic for goals, rewards, transactions
+- All HTTP endpoints used by the frontend
+- Auth-protected API routes
+
 ---
 
 ## 🛠 Dev Tools
 
 ### Open Prisma Studio
 
-Launch Prisma Studio to browse your DB:
-
 ```bash
-pnpm prisma-studio
+pnpm studio
 ```
 
 Studio will open at [http://localhost:5555](http://localhost:5555)
@@ -111,19 +164,24 @@ Studio will open at [http://localhost:5555](http://localhost:5555)
 
 ```bash
 smart-saver/
-├── app/              # Next.js App
-│   └── api/          # API route handlers
+├── app/                   # Next.js App
+│   ├── login/             # Login page
+│   ├── dashboard/         # Authenticated user dashboard
+│   └── api/               # API route handlers
 ├── lib/
-│   ├── prisma.ts     # Shared Prisma client
-│   └── services/     # Business logic by model
+│   ├── prisma.ts          # Shared Prisma client
+│   ├── auth.ts            # NextAuth config and callbacks
+│   └── services/          # Business logic by model
 ├── prisma/
-│   ├── schema.prisma # Prisma schema definition
-│   └── seed.ts       # DB seed script
-├── tests/            # Vitest unit/integration tests
+│   ├── schema.prisma      # Prisma schema definition
+│   └── seed.ts            # DB seed script
+├── tests/                 # Vitest unit/integration tests
 │   ├── services/
 │   └── api/
-├── .env              # DB connection string
-└── README.md         # This file
+├── scripts/
+│   └── dev-bootstrap.sh   # Bootstrap script
+├── .env                   # DB and auth config
+└── README.md              # This file
 ```
 
 ---
@@ -134,15 +192,19 @@ Here's a reference to the available scripts in `package.json`:
 
 ```json
 "scripts": {
-  "dev": "next dev --turbopack",
+  "dev": "next dev --turbopack  --port 3000",
+  "bootstrap": "./scripts/dev-bootstrap.sh",
   "build": "next build",
   "start": "next start",
   "lint": "next lint",
-  "prisma-studio": "pnpm dlx prisma studio",
-  "seed": "pnpm dlx prisma db seed",
-  "whipe-and-reseed": "pnpm dlx prisma migrate reset",
   "test": "vitest",
-  "test:ui": "vitest --ui"
+  "test:ui": "vitest --ui",
+  "db:reset": "pnpm dlx prisma migrate reset --force",
+  "db:generate": "pnpm exec prisma generate",
+  "db:migrate": "pnpm exec prisma migrate dev",
+  "db:studio": "pnpm exec prisma studio",
+  "db:seed": "tsx prisma/seed.ts",
+  "studio": "pnpm dlx prisma studio"
 }
 ```
 
