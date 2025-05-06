@@ -20,7 +20,6 @@
     "db:migrate": "pnpm exec prisma migrate dev",
     "db:studio": "pnpm exec prisma studio",
     "db:seed": "tsx prisma/seed.ts",
-    "postinstall": "pnpm db:generate",
     "vercel-build": "prisma generate --no-engine && prisma migrate deploy && pnpm build"
   },
   "dependencies": {
@@ -46,6 +45,9 @@
     "react-dom": "^19.1.0",
     "recharts": "^2.15.3",
     "sonner": "^2.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "swagger-ui-react": "^5.21.0",
     "tailwind-merge": "^3.2.0",
     "tsx": "^4.19.4",
     "uuid": "^11.1.0",
@@ -61,6 +63,8 @@
     "@types/node": "^22.15.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.3",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-react": "^5.18.0",
     "@vitest/ui": "3.1.2",
     "eslint": "^9.26.0",
     "eslint-config-next": "15.3.1",

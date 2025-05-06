@@ -3,6 +3,39 @@ import { NextResponse } from "next/server";
 import db from "@/lib/db/db";
 
 const prisma = db;
+/**
+ * @swagger
+ * /api/goals/{id}/contribute:
+ *   post:
+ *     summary: Contribute to a goal
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Goal ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               amount:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Goal updated
+ *       400:
+ *         description: Invalid amount
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: Goal or user not found
+ */
 
 export async function POST(
   request: Request,

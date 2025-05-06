@@ -124,6 +124,14 @@ Use the session data to access the user email or ID and scope access accordingly
 
 ---
 
+### 📘 Swagger API Docs
+
+Interactive API documentation is available at [`/swagger`](http://localhost:3000/docs) and the raw OpenAPI spec can be accessed at [`/api/docs`](http://localhost:3000/api/docs).
+
+The docs are automatically generated from JSDoc comments within the API route files.
+
+---
+
 ## 🍊 Testing
 
 Run all tests (headless):
@@ -182,30 +190,6 @@ smart-saver/
 │   └── dev-bootstrap.sh   # Bootstrap script
 ├── .env                   # DB and auth config
 └── README.md              # This file
-```
-
----
-
-## 📄 Scripts
-
-Here's a reference to the available scripts in `package.json`:
-
-```json
-"scripts": {
-  "dev": "next dev --turbopack  --port 3000",
-  "bootstrap": "./scripts/dev-bootstrap.sh",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "test": "vitest",
-  "test:ui": "vitest --ui",
-  "db:reset": "pnpm dlx prisma migrate reset --force",
-  "db:generate": "pnpm exec prisma generate",
-  "db:migrate": "pnpm exec prisma migrate dev",
-  "db:studio": "pnpm exec prisma studio",
-  "db:seed": "tsx prisma/seed.ts",
-  "studio": "pnpm dlx prisma studio"
-}
 ```
 
 ---
