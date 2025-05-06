@@ -1,11 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { DELETE, GET } from "@/app/api/accounts/[id]/route";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
 import { Currency } from "@prisma/client";
+
+const prisma = db;
 
 describe("GET /api/accounts/:id", () => {
   it("should return the account with transactions", async () => {
-    const account = await prisma.account.findFirst();
+    const account = await prisma.bankAccount.findFirst();
     if (!account) throw new Error("No account found — seed an account first.");
     const req = new Request(`http://localhost/api/accounts/${account?.id}`);
     const res = await GET(req, { params: { id: account?.id } });
@@ -31,7 +33,7 @@ describe("DELETE /api/accounts/:id", () => {
     const user = await prisma.user.findFirst();
     if (!user) throw new Error("No user found");
 
-    const account = await prisma.account.create({
+    const account = await prisma.bankAccount.create({
       data: {
         accountNumber: "****DEL",
         accountType: "Temp",

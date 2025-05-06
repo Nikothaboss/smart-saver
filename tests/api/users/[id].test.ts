@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { DELETE, GET } from "@/app/api/users/[id]/route";
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
+
+const prisma = db;
 
 describe("GET /api/users/:id", () => {
   it("should return the user with related data", async () => {

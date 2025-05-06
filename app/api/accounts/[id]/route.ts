@@ -1,12 +1,12 @@
 import {
-  deleteAccountById,
-  getAccountById,
-} from "@/lib/services/accountService";
+  deleteBankAccountById,
+  getBankAccountById,
+} from "@/lib/services/bankAccountService";
 import { NextResponse } from "next/server";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
-    const account = await getAccountById(params.id);
+    const account = await getBankAccountById(params.id);
     if (!account) {
       return NextResponse.json({ error: "Account not found" }, { status: 404 });
     }
@@ -24,7 +24,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const deleted = await deleteAccountById(params.id);
+    const deleted = await deleteBankAccountById(params.id);
     return NextResponse.json(deleted);
   } catch (error) {
     console.error(error);

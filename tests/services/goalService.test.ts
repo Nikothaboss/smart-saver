@@ -5,7 +5,9 @@ import {
   getGoalsByUserId,
   deleteGoalById,
 } from "@/lib/services/goalService";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
+
+const prisma = db;
 
 describe("goalService", async () => {
   const user = await prisma.user.findFirst();

@@ -5,7 +5,9 @@ import {
   getUserTransactions,
 } from "@/lib/services/userService";
 import { describe, it, expect } from "vitest";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
+
+const prisma = db;
 
 describe("userService", async () => {
   const user = await prisma.user.findFirst();

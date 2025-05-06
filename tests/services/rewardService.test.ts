@@ -4,7 +4,9 @@ import {
   deleteRewardById,
   getRewardsByUserId,
 } from "@/lib/services/rewardService";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
+
+const prisma = db;
 
 describe("rewardService", async () => {
   const user = await prisma.user.findFirst();

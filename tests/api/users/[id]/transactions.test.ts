@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { GET } from "@/app/api/users/[id]/transactions/route";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
+
+const prisma = db;
 
 describe("GET /api/users/:id/transactions", () => {
   it("should return transactions for the user's accounts", async () => {

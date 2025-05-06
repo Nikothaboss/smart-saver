@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { POST } from "@/app/api/rewards/route";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
 import { NextRequest } from "next/server";
+
+const prisma = db;
 
 describe("POST /api/rewards", () => {
   it("should create a reward for a user", async () => {

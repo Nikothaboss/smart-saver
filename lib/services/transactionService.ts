@@ -1,5 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import db from "../db/db";
 import { Currency } from "@prisma/client";
+
+const prisma = db;
 
 export const createTransaction = async (data: {
   date: string;
@@ -7,6 +9,7 @@ export const createTransaction = async (data: {
   amount: number;
   currency: Currency;
   accountId: string;
+  userId: string;
 }) => {
   return prisma.transaction.create({
     data: {
@@ -19,9 +22,7 @@ export const createTransaction = async (data: {
 export const getTransactionsByUserId = async (userId: string) => {
   return prisma.transaction.findMany({
     where: {
-      account: {
-        userId,
-      },
+      userId,
     },
     include: {
       account: true,

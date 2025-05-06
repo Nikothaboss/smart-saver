@@ -1,9 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { POST } from "@/app/api/accounts/route";
 import { Currency } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
 import { NextRequest } from "next/server";
 
+const prisma = db;
 describe("POST /api/accounts", () => {
   it("should create a new account", async () => {
     const user = await prisma.user.findFirst();

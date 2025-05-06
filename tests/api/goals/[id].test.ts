@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { DELETE, PATCH } from "@/app/api/goals/[id]/route";
-import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
+
+import db from "@/lib/db/db";
+const prisma = db;
 
 describe("PATCH /api/goals/:id", () => {
   it("should update an existing goal", async () => {

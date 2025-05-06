@@ -1,13 +1,17 @@
 import { describe, it, expect } from "vitest";
 import { POST } from "@/app/api/transactions/route";
 import { Currency } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
 import { NextRequest } from "next/server";
 
+const prisma = db;
 describe("POST /api/transactions", () => {
   it("should create a transaction for an account", async () => {
-    const account = await prisma.account.findFirst();
-    if (!account) throw new Error("No account found — seed an account first.");
+    const account = await prisma.bankAccount.findFirst({
+      include: { user: true },
+    });
+    if (!account || !account.user)
+      throw new Error("No account or user found — seed first.");
 
     const payload = {
       date: new Date().toISOString(),
@@ -15,9 +19,10 @@ describe("POST /api/transactions", () => {
       amount: -99.99,
       currency: Currency.NOK,
       accountId: account.id,
+      userId: account.user.id,
     };
 
-    const req = new NextRequest("http://localhost/api/transactions", {
+    const req = new NextRequest("http://localhost:3000/api/transactions", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "application/json" },

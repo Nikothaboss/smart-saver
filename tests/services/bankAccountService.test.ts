@@ -1,20 +1,22 @@
 import { describe, it, expect } from "vitest";
 import {
-  getAccountById,
-  createAccount,
-  deleteAccountById,
-} from "@/lib/services/accountService";
+  getBankAccountById,
+  createBankAccount,
+  deleteBankAccountById,
+} from "@/lib/services/bankAccountService"; // updated import
 import { Currency } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
 
-describe("accountService", async () => {
+const prisma = db;
+
+describe("bankAccountService", async () => {
   let createdAccountId: string;
+
   const user = await prisma.user.findFirst();
   if (!user) throw new Error("No user found — seed a user first.");
 
-  it("should create a new account for a user", async () => {
-    if (!user) throw new Error("No user found — seed a user first.");
-    const account = await createAccount({
+  it("should create a new bank account for a user", async () => {
+    const account = await createBankAccount({
       accountNumber: "****4321",
       accountType: "Checking",
       balance: 7500,
@@ -29,20 +31,20 @@ describe("accountService", async () => {
     createdAccountId = account.id;
   });
 
-  it("should return the account with transactions", async () => {
-    const account = await getAccountById(createdAccountId);
+  it("should return the bank account with transactions", async () => {
+    const account = await getBankAccountById(createdAccountId);
     expect(account).toBeDefined();
     expect(account?.id).toBe(createdAccountId);
     expect(Array.isArray(account?.transactions)).toBe(true);
   });
 
-  it("should return null for non-existent account", async () => {
-    const result = await getAccountById("non-existent-id");
+  it("should return null for non-existent bank account", async () => {
+    const result = await getBankAccountById("non-existent-id");
     expect(result).toBeNull();
   });
 
-  it("should delete an account", async () => {
-    const account = await createAccount({
+  it("should delete a bank account", async () => {
+    const account = await createBankAccount({
       accountNumber: "****DEL",
       accountType: "Test",
       balance: 123,
@@ -50,7 +52,7 @@ describe("accountService", async () => {
       userId: user.id,
     });
 
-    const deleted = await deleteAccountById(account.id);
+    const deleted = await deleteBankAccountById(account.id);
     expect(deleted).toBeDefined();
     expect(deleted.id).toBe(account.id);
   });

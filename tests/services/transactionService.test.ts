@@ -5,24 +5,31 @@ import {
   getTransactionsByUserId,
 } from "@/lib/services/transactionService";
 import { Currency } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
+
+const prisma = db;
 
 describe("transactionService", async () => {
   const user = await prisma.user.findFirst();
   if (!user) throw new Error("No user found — seed a user first.");
+
   const userId = user.id;
-  const account = await prisma.account.findFirst({
+
+  const account = await prisma.bankAccount.findFirst({
     where: { userId: userId },
   });
+
   const accountId = account?.id;
-  if (!accountId) throw new Error("No account found — seed an account first.");
-  it("should create a transaction for an account", async () => {
+  if (!accountId) throw new Error("No bank account found — seed one first.");
+
+  it("should create a transaction for a bank account", async () => {
     const transaction = await createTransaction({
       date: new Date().toISOString(),
       description: "Test Transaction",
       amount: -45.0,
       currency: Currency.NOK,
       accountId,
+      userId,
     });
 
     expect(transaction).toBeDefined();
@@ -45,6 +52,7 @@ describe("transactionService", async () => {
       amount: -10,
       currency: Currency.NOK,
       accountId,
+      userId,
     });
 
     const deleted = await deleteTransactionById(transaction.id);

@@ -1,14 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { DELETE } from "@/app/api/transactions/[id]/route";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
 import { Currency } from "@prisma/client";
+
+const prisma = db;
 
 describe("DELETE /api/transactions/:id", () => {
   it("should delete a transaction", async () => {
     const user = await prisma.user.findFirst();
     if (!user) throw new Error("No user found");
 
-    const account = await prisma.account.findFirst({
+    const account = await prisma.bankAccount.findFirst({
       where: { userId: user.id },
     });
     if (!account) throw new Error("No account found for test user");
@@ -20,6 +22,7 @@ describe("DELETE /api/transactions/:id", () => {
         amount: -42,
         currency: Currency.NOK,
         accountId: account.id,
+        userId: user.id,
       },
     });
 

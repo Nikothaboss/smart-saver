@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { DELETE } from "@/app/api/rewards/[id]/route";
-import { prisma } from "@/lib/prisma";
+import db from "@/lib/db/db";
+
+const prisma = db;
 
 describe("DELETE /api/rewards/:id", () => {
   it("should delete a reward", async () => {
