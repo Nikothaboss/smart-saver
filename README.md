@@ -18,6 +18,13 @@ This guide covers everything you need to get started with development, including
 
 ---
 
+### 🌐 Hosted Version
+
+A hosted version of the application is available at:
+[Smart Saver - Hosted Version](https://smart-saver-three.vercel.app/)
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Clone the repo and install dependencies
