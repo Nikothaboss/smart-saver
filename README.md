@@ -173,7 +173,7 @@ Studio will open at [http://localhost:5555](http://localhost:5555)
 ```bash
 smart-saver/
 ├── app/                   # Next.js App
-│   ├── login/             # Login page
+│   ├── page.tsx (root)    # Login page
 │   ├── dashboard/         # Authenticated user dashboard
 │   └── api/               # API route handlers
 ├── lib/
