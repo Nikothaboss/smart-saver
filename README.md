@@ -175,6 +175,7 @@ smart-saver/
 ├── app/                   # Next.js App
 │   ├── page.tsx (root)    # Login page
 │   ├── dashboard/         # Authenticated user dashboard
+│   ├── swagger/           # Swagger docs
 │   └── api/               # API route handlers
 ├── lib/
 │   ├── prisma.ts          # Shared Prisma client
